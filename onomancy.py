@@ -67,6 +67,7 @@ with open(name_txt, "r") as fin:
 				blue(tag.text)
 
 			if index == 7:
+				print(tag.text)
 				yinyang = soup.find("p", text=re.compile("陰陽配列は"))
 				if yinyang is not None:
 					print(yinyang.text)
