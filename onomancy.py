@@ -13,6 +13,23 @@ if len(args) >= 2:
 if gender != "m" and gender != "f":
 	sys.exit()
 
+def getcolor(colorname):
+	colors = {
+		'red': '\033[31m',
+		'green': '\033[32m',
+		'yellow': '\033[33m',
+		'blue': '\033[34m',
+		}
+	def func2(c):
+		return print(colors[colorname] + c + '\033[0m')
+
+	return func2
+
+red    = getcolor('red')
+green  = getcolor('green')
+yellow = getcolor('yellow')
+blue   = getcolor('blue')
+
 last_name = "金子"
 param = urllib.parse.quote(last_name)
 base_url = "https://enamae.net/" + gender + "/" + param + "__"
@@ -35,13 +52,23 @@ with open(name_txt, "r") as fin:
 
 		print(first_name + name_suffix)
 		tags = soup.find_all('h3')
+
 		index = 1
 		for tag in tags:
 			if index > 7:
 				break 
-			print(tag.text)
+			if tag.text.find('吉凶混合') > -1:
+				green(tag.text)
+			elif tag.text.find('大吉') > -1:
+				red(tag.text)
+			elif tag.text.find('吉') > -1:
+				yellow(tag.text)
+			elif tag.text.find('凶') > -1:
+				blue(tag.text)
+
 			if index == 7:
 				yinyang = soup.find("p", text=re.compile("陰陽配列は"))
-				print(yinyang)
+				if yinyang is not None:
+					print(yinyang.text)
 				print()
 			index+=1
