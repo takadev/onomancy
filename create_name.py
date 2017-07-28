@@ -2,7 +2,10 @@ import sys
 import requests
 import codecs
 import re
+import bs4
 import urllib
+import urllib.request
+from urllib.parse import urlparse
 
 args = sys.argv
 
@@ -31,12 +34,36 @@ if gender == 'f':
 s = requests.session()
 res1 = s.post(url, data=cookie)
 res1.raise_for_status()
-iiname_id = s.cookies.get("iinamae")
 
-post = {
-    #"iiname":iiname_id,
-    "yomi":first_name,
-    "mode":"hibiki"
+last_name_enc = last_name.encode("euc-jp")
+first_name_enc = first_name.encode("euc-jp")
+
+param = {
+    "mode":"hibiki",
+    "pg":1,
+    "sei":urllib.parse.quote(last_name_enc),
+    "sex":1,
+    "yomi":urllib.parse.quote(first_name_enc),
+    "view":200
 }
-res2 = s.post(url, data=post, headers={'Referer': url})
-print(res2.content.decode('euc-jp'))
+if gender == 'f':
+    param["sex"] = 2
+
+f = open(first_name + '.txt', 'w')
+
+while True:
+
+    param_str = "&".join("%s=%s" % (k,v) for k,v in param.items())
+    res2 = s.get(url, params=param_str, headers={'Referer': url})
+    html = res2.content.decode('euc-jp')
+    soup = bs4.BeautifulSoup(html, 'html.parser')
+    tags = soup.find_all("a", title=re.compile("鑑定"))
+    if len(tags) == 0:
+        break
+
+    for tag in tags:
+        f.write(tag.text + '\n')
+
+    param["pg"] += 1
+
+f.close()
