@@ -6,7 +6,7 @@ import bs4
 import urllib
 import urllib.request
 from urllib.parse import urlparse
-
+ 
 args = sys.argv
 
 if len(args) < 3:
@@ -57,6 +57,7 @@ while True:
     res2 = s.get(url, params=param_str, headers={'Referer': url})
     html = res2.content.decode('euc-jp')
     soup = bs4.BeautifulSoup(html, 'html.parser')
+
     tags = soup.find_all("a", title=re.compile("鑑定"))
     if len(tags) == 0:
         break

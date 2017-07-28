@@ -1,8 +1,4 @@
 #!/bin/sh
-echo $0
-echo $1
-echo $2
-echo $#
 
 if [ $# -ne 2 ]; then
 	exit 1
