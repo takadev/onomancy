@@ -53,12 +53,26 @@ with open(name_txt, "r") as fin:
 		print(first_name + name_suffix)
 		tags = soup.find_all('h3')
 
+		disp = True
+		index = 1
+		for tag in tags:
+			if index > 7:
+				break
+
+			if tag.text.find('凶') > -1:
+				disp = False
+
+		if disp == False:
+			continue
+
 		index = 1
 		for tag in tags:
 			if index > 7:
 				break 
 			if tag.text.find('吉凶混合') > -1:
 				green(tag.text)
+			elif tag.text.find('特殊格') > -1:
+				print(tag.text)
 			elif tag.text.find('大吉') > -1:
 				red(tag.text)
 			elif tag.text.find('吉') > -1:
