@@ -20,21 +20,6 @@ first_name = args[2]
 
 last_name = "金子"
 url = "http://www.iinamae.net/nm/"
-boy_txt = "boy.txt"
-girl_txt = "girl.txt"
-cookie = { 
-    "sei":last_name,
-    "sex":1,
-    "yomi":first_name,
-    "mode":"hibiki"
-}
-if gender == 'f':
-    cookie["sex"] = 2
-
-s = requests.session()
-res1 = s.post(url, data=cookie)
-res1.raise_for_status()
-
 last_name_enc = last_name.encode("euc-jp")
 first_name_enc = first_name.encode("euc-jp")
 
@@ -42,17 +27,16 @@ param = {
     "mode":"hibiki",
     "pg":1,
     "sei":urllib.parse.quote(last_name_enc),
-    "sex":1,
     "yomi":urllib.parse.quote(first_name_enc),
     "view":200
 }
 if gender == 'f':
-    param["sex"] = 2
+    param["sex"] = 1
 
+s = requests.session()
 f = open(first_name + '.txt', 'w')
 
 while True:
-
     param_str = "&".join("%s=%s" % (k,v) for k,v in param.items())
     res2 = s.get(url, params=param_str, headers={'Referer': url})
     html = res2.content.decode('euc-jp')
@@ -68,3 +52,4 @@ while True:
     param["pg"] += 1
 
 f.close()
+s.close()

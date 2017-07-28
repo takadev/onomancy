@@ -9,7 +9,7 @@ python create_name.py $1 $2
 name_file=$2".txt"
 target_file="boy.txt"
 if [ $1 = "f" ]; then
-	"${target_file}"="girl.txt"
+	target_file="girl.txt"
 fi
 
 cp "${name_file}" "${target_file}"
