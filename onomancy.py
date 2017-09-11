@@ -42,7 +42,7 @@ if gender == 'f':
 	name_txt = girl_txt
 	name_suffix = 'ちゃん'
 
-with open(name_txt, "r") as fin:
+with open(name_txt, "r", encoding="utf-8") as fin:
 	for first_name in fin:
 		first_name = first_name.strip()
 		url = base_url + urllib.parse.quote(first_name)
